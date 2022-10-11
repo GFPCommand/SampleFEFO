@@ -37,7 +37,7 @@ class ProductsContainer<T>
 
         while (counter < _count)
         {
-            if (node.GetExpireDays() > 0)
+            if (node.GetExpireDays() != 0)
             {
                 countExpiredItems++;
                 node = node.Next;
