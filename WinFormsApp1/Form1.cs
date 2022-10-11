@@ -50,17 +50,18 @@ namespace WinFormsApp1
 
             if (_productSaveName.Equals(_product))
             {
-                    _count++;
+                _count++;
 
-                    if (_count <= 2)
-                        products.Items.Remove($"{_product}");
-                    else
-                        products.Items.Remove($"{_product} x{_count - 1}");
+                if (_count <= 2)
+                    products.Items.Remove($"{_product}");
+                else
+                    products.Items.Remove($"{_product} x{_count - 1}");
 
-                    _product += $" x{_count}";
-                
+                _product += $" x{_count}";
 
-                } else
+
+            }
+            else
             {
                 _productSaveName = _product;
                 _count = 1;
@@ -87,6 +88,8 @@ namespace WinFormsApp1
 
             _productsList = container.ProductsList;
 
+            
+
             for (int i = 0; i < products.Items.Count; i++)
             {
                 value = products.Items[i].ToString();
@@ -97,7 +100,9 @@ namespace WinFormsApp1
                         _numbers.Add(i);
                 }
             }
-            //empty list of numbers
+
+            
+
             try
             {
                 for (int i = 0; i < _numbers.Count; i++)
@@ -112,7 +117,8 @@ namespace WinFormsApp1
                     checkText.Visible = false;
                     del.Visible = false;
                 }
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

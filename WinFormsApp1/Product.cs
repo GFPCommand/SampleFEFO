@@ -1,8 +1,10 @@
-﻿class Product<T> : IExpired
+﻿using Debugger;
+
+class Product<T> : IExpired
 {
     private int _dd, _mm, _yyyy;
 
-    private readonly int _ddNow, _mmNow, _yyyyNow;
+    private int _ddNow, _mmNow, _yyyyNow;
 
     private T _value;
 
@@ -11,9 +13,7 @@
     public Product(int day, int month, int year, T value)
     {
         _ddNow = DateTime.Now.Day;
-
         _mmNow = DateTime.Now.Month;
-
         _yyyyNow = DateTime.Now.Year;
 
         _dd = day;

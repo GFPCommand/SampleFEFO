@@ -33,15 +33,14 @@ class ProductsContainer<T>
 
         if (_count == 0) return 0;
 
-        DebugClass.WriteDebugDataToFile(_count.ToString());
-
         while (counter < _count)
         {
             if (node.GetExpireDays() != 0)
             {
                 countExpiredItems++;
-                node = node.Next;
             }
+
+            node = node.Next;
 
             counter++;
         }
@@ -53,13 +52,15 @@ class ProductsContainer<T>
     {
         if (isCheck == false)
         {
-            if ((day < _dayNow && month == _monthNow) || (month < _monthNow && (year < _yearNow || year == _yearNow)) || year < _yearNow)
+            if ((day < _dayNow && month == _monthNow) || (month < _monthNow && year == _yearNow) || year < _yearNow)
             {
                 throw new Exception("Object has already expired!");
             }
         }
 
         Product<T> node = new(day, month, year, val);
+
+        node.Previous = _productTail;
 
         if (_productTail == null) _productHead = node;
         else _productTail.Next = node;
@@ -69,7 +70,7 @@ class ProductsContainer<T>
         _count++;
     }
 
-    public void PopBad() //i have some issues in this method. i should try to fix it anyway. one of variants is change pointers
+    public void PopBad()
     {
         int counter = 0;
 
