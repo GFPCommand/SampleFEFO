@@ -4,7 +4,7 @@ class Product<T> : IExpired
 {
     private int _dd, _mm, _yyyy;
 
-    private int _ddNow, _mmNow, _yyyyNow;
+    private static readonly int s_ddNow = DateTime.Now.Day, s_mmNow = DateTime.Now.Month, s_yyyyNow = DateTime.Now.Year;
 
     private T _value;
 
@@ -12,10 +12,6 @@ class Product<T> : IExpired
     
     public Product(int day, int month, int year, T value)
     {
-        _ddNow = DateTime.Now.Day;
-        _mmNow = DateTime.Now.Month;
-        _yyyyNow = DateTime.Now.Year;
-
         _dd = day;
         _mm = month;
         _yyyy = year;
@@ -33,9 +29,9 @@ class Product<T> : IExpired
     {
         int days = 0;
 
-        if ((_dd < _ddNow && _mm == _mmNow) || (_mm < _mmNow && (_yyyy < _yyyyNow || _yyyy == _yyyyNow)) || _yyyy < _yyyyNow)
+        if ((_dd < s_ddNow && _mm == s_mmNow) || (_mm < s_mmNow && (_yyyy < s_yyyyNow || _yyyy == s_yyyyNow)) || _yyyy < s_yyyyNow)
         {
-            days = (_ddNow - _dd) + ((_mmNow - _mm) * 30) + ((_yyyyNow - _yyyy) * 365);
+            days = (s_ddNow - _dd) + ((s_mmNow - _mm) * 30) + ((s_yyyyNow - _yyyy) * 365);
         }
 
         return days;
