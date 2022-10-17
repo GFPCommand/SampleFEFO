@@ -131,8 +131,10 @@
             this.checkText.AutoSize = true;
             this.checkText.Location = new System.Drawing.Point(12, 244);
             this.checkText.Name = "checkText";
-            this.checkText.Size = new System.Drawing.Size(0, 15);
+            this.checkText.Size = new System.Drawing.Size(200, 15);
             this.checkText.TabIndex = 5;
+            this.checkText.Text = "Product is expired. Require to delete.";
+            this.checkText.Visible = false;
             // 
             // del
             // 

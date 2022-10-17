@@ -76,7 +76,7 @@ namespace WinFormsApp1
             if (container.CheckExpiredItems() > 0)
             {
                 del.Visible = true;
-                checkText.Text = "Product is expired. Require to delete.";
+                checkText.Visible = true;
             }
         }
 
@@ -84,21 +84,18 @@ namespace WinFormsApp1
         {
             string value = "";
 
-            for (int i = 0; i < products.Items.Count; i++)
+            for (int i = 0; i < products.Items.Count; i++) //compare elements in ListBox with existing elements in ProductsContainer
             {
                 value = products.Items[i].ToString();
+
+                foreach (var item in _productsList)
+                {
+                    if (value.Contains(item))
+                        _numbers.Add(i);
+                }
             }
 
-            DebugClass.WriteDebugDataToFile(_productsList.Count);
-
             container.PopBad();
-            products.Items.RemoveAt(0);
-
-            MessageBox.Show("OK");
-
-            DebugClass.WriteDebugDataToFile(_productsList.Count);
-
-
 
             //for (int i = 0; i < products.Items.Count; i++)
             //{
