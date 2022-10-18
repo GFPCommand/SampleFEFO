@@ -80,7 +80,7 @@ namespace WinFormsApp1
             }
         }
 
-        private void del_Click(object sender, EventArgs e)
+        private void del_Click(object sender, EventArgs e) //TODO logic. Action works too many times.
         {
             string value = "";
 
