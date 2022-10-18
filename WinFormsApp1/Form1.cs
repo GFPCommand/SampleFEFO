@@ -73,7 +73,7 @@ namespace WinFormsApp1
         {
             _productsList = container.FindExpiredElements();
 
-            if (container.CheckExpiredItems() > 0)
+            if (_productsList.Count > 0)
             {
                 del.Visible = true;
                 checkText.Visible = true;
@@ -84,53 +84,26 @@ namespace WinFormsApp1
         {
             string value = "";
 
-            for (int i = 0; i < products.Items.Count; i++) //compare elements in ListBox with existing elements in ProductsContainer
+            for (int i = 0; i < products.Items.Count; i++)
             {
                 value = products.Items[i].ToString();
-
+                
                 foreach (var item in _productsList)
                 {
                     if (value.Contains(item))
-                        _numbers.Add(i);
+                        products.Items.Remove(value);
                 }
             }
 
             container.PopBad();
+            container.PopFresh();
 
-            //for (int i = 0; i < products.Items.Count; i++)
-            //{
-            //    value = products.Items[i].ToString();
+            MessageBox.Show("Success", "Success", MessageBoxButtons.OK);
 
-            //    foreach (var item in _productsList)     --> Change to for loop; instance element in loop
-            //    {
-            //        if (value.Contains(item))
-            //            _numbers.Add(i);
-            //    }
-            //}
+            _count = 1;
 
-            
-
-            //try
-            //{
-            //    for (int i = 0; i < _numbers.Count; i++)
-            //    {
-            //        container.PopBad();
-            //        products.Items.RemoveAt(_numbers[i]);
-
-            //        MessageBox.Show("Success", "Success", MessageBoxButtons.OK);
-
-            //        _count = 1;
-
-            //        checkText.Visible = false;
-            //        del.Visible = false;
-            //    }
-            //}
-            //catch (Exception ex)
-            //{
-            //    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            //}
-
-
+            checkText.Visible = false;
+            del.Visible = false;
         }
     }
 }

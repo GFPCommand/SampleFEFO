@@ -106,26 +106,20 @@ class ProductsContainer<T>
         {
             if (node.GetExpireDays() > 0)
             {
-                if (counter == 0)
-                {
-                    node = node.Next;
-                    node.Previous = node.Next;
-
-                    node = null;
-                }
-                else
-                {
-                    node.Previous = node.Next;
-                    node = null;
-                }
-            } else
                 node = node.Next;
+
+                node.Previous = null;
+
+                _count--;
+                
+            }
+            node = node.Next;
 
             counter++;
         }
     }
 
-    public void PopFresh() //change logic to delete items
+    public void PopFresh()
     {
         int counter = _count;
 
@@ -135,16 +129,21 @@ class ProductsContainer<T>
 
         while (counter > 0)
         {
-            if (node.GetExpireDays() > 0)
+            if (node?.GetExpireDays() > 0)
             {
+                if (counter == 0)
+                {
+                    node = node.Previous;
 
+                    node.Next = null;
+
+                    _count--;
+                }
             }
 
-            node = node.Previous;
+            node = node?.Previous;
 
             counter--;
-        }
-
-        
+        }      
     }
 }
