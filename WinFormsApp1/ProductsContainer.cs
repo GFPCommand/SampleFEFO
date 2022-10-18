@@ -95,25 +95,30 @@ class ProductsContainer<T>
 
         if (_count == 0) throw new Exception("List is empty!");
 
-        if (_count == 1)
+        if (_count == 1 && node.GetExpireDays() > 0)
         {
             node = null;
+            return;
         }
-
-        if (node == null) return;
 
         while (counter < _count)
         {
-            if (node.GetExpireDays() > 0)
+            if (node?.GetExpireDays() > 0)
             {
-                node = node.Next;
+                if (node.Next == null)
+                {
+                    node = null;
+                } else
+                {
+                    node = node.Next;
 
-                node.Previous = null;
+                    node.Previous = null;
+                }
 
                 _count--;
                 
             }
-            node = node.Next;
+            node = node?.Next;
 
             counter++;
         }

@@ -1,5 +1,3 @@
-using Debugger;
-
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
@@ -8,7 +6,7 @@ namespace WinFormsApp1
         private string _product = "";
         private string _productSaveName = "";
         private int _count = 1;
-        private List<int> _numbers;
+        private bool _isDeleted = false;
 
         private List<string> _productsList;
 
@@ -19,7 +17,6 @@ namespace WinFormsApp1
             InitializeComponent();
 
             container = new ProductsContainer<string>();
-            _numbers = new List<int>();
         }
 
         private void add_Click(object sender, EventArgs e)
@@ -39,6 +36,8 @@ namespace WinFormsApp1
             try
             {
                 container.Push(_dd, _mm, _yyyy, _product, helperBox.Checked);
+
+                _isDeleted = false;
             }
             catch (Exception ex)
             {
@@ -73,14 +72,14 @@ namespace WinFormsApp1
         {
             _productsList = container.FindExpiredElements();
 
-            if (_productsList.Count > 0)
+            if (_productsList.Count > 0 && !_isDeleted)
             {
                 del.Visible = true;
                 checkText.Visible = true;
             }
         }
 
-        private void del_Click(object sender, EventArgs e) //TODO logic. Action works too many times.
+        private void del_Click(object sender, EventArgs e)
         {
             string value = "";
 
@@ -98,9 +97,11 @@ namespace WinFormsApp1
             container.PopBad();
             container.PopFresh();
 
-            MessageBox.Show("Success", "Success", MessageBoxButtons.OK);
+            MessageBox.Show("Expired elements deleted", "Success", MessageBoxButtons.OK);
 
             _count = 1;
+
+            _isDeleted = true;
 
             checkText.Visible = false;
             del.Visible = false;
