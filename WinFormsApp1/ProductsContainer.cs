@@ -2,7 +2,7 @@
 
 class ProductsContainer<T>
 {
-    private readonly int _dayNow, _monthNow, _yearNow;
+    private static readonly int s_dayNow = DateTime.Now.Day, s_monthNow = DateTime.Now.Month, s_yearNow = DateTime.Now.Year;
 
     private Product<T> _productHead;
     private Product<T> _productTail;
@@ -13,15 +13,9 @@ class ProductsContainer<T>
     public ProductsContainer()
     {
         _productsList = new List<T>();
-
-        _dayNow = DateTime.Now.Day;
-        _monthNow = DateTime.Now.Month;
-        _yearNow = DateTime.Now.Year;
     }
 
     public int Count => _count;
-
-    public List<T> ProductsList => _productsList;
 
     public int CheckExpiredItems()
     {
@@ -35,7 +29,7 @@ class ProductsContainer<T>
 
         while (counter < _count)
         {
-            if (node.GetExpireDays() != 0)
+            if (node.GetExpireDays() > 0)
             {
                 countExpiredItems++;
             }
@@ -52,7 +46,7 @@ class ProductsContainer<T>
     {
         if (isCheck == false)
         {
-            if ((day < _dayNow && month == _monthNow) || (month < _monthNow && year == _yearNow) || year < _yearNow)
+            if ((day < s_dayNow && month == s_monthNow) || (month < s_monthNow && year == s_yearNow) || year < s_yearNow)
             {
                 throw new Exception("Object has already expired!");
             }
@@ -70,13 +64,13 @@ class ProductsContainer<T>
         _count++;
     }
 
-    public void PopBad()
+    public List<T> FindExpiredElements()
     {
         int counter = 0;
 
         Product<T> node = _productHead;
 
-        if (_count == 0) throw new Exception("List is empty!");
+        if (_count == 0) return default;
 
         while (counter < _count)
         {
@@ -90,7 +84,44 @@ class ProductsContainer<T>
             counter++;
         }
 
-        _count--;
+        return _productsList;
+    }
+
+    public void PopBad()
+    {
+        int counter = 0;
+
+        Product<T> node = _productHead;
+
+        if (_count == 0) throw new Exception("List is empty!");
+
+        if (_count == 1 && node.GetExpireDays() > 0)
+        {
+            node = null;
+            return;
+        }
+
+        while (counter < _count)
+        {
+            if (node?.GetExpireDays() > 0)
+            {
+                if (node.Next == null)
+                {
+                    node = null;
+                } else
+                {
+                    node = node.Next;
+
+                    node.Previous = null;
+                }
+
+                _count--;
+                
+            }
+            node = node?.Next;
+
+            counter++;
+        }
     }
 
     public void PopFresh()
@@ -103,16 +134,21 @@ class ProductsContainer<T>
 
         while (counter > 0)
         {
-            if (node.GetExpireDays() > 0)
+            if (node?.GetExpireDays() > 0)
             {
-                _productsList.Add(node.Value);
+                if (counter == 0)
+                {
+                    node = node.Previous;
+
+                    node.Next = null;
+
+                    _count--;
+                }
             }
 
-            node = node.Previous;
+            node = node?.Previous;
 
             counter--;
-        }
-
-        _count--;
+        }      
     }
 }

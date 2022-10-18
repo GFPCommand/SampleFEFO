@@ -1,5 +1,3 @@
-using Debugger;
-
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
@@ -8,7 +6,7 @@ namespace WinFormsApp1
         private string _product = "";
         private string _productSaveName = "";
         private int _count = 1;
-        private List<int> _numbers;
+        private bool _isDeleted = false;
 
         private List<string> _productsList;
 
@@ -19,8 +17,6 @@ namespace WinFormsApp1
             InitializeComponent();
 
             container = new ProductsContainer<string>();
-            _productsList = new List<string>();
-            _numbers = new List<int>();
         }
 
         private void add_Click(object sender, EventArgs e)
@@ -40,10 +36,11 @@ namespace WinFormsApp1
             try
             {
                 container.Push(_dd, _mm, _yyyy, _product, helperBox.Checked);
+
+                _isDeleted = false;
             }
             catch (Exception ex)
             {
-                DebugClass.WriteExceptionsToFile(ex);
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -73,12 +70,12 @@ namespace WinFormsApp1
 
         private void check_Click(object sender, EventArgs e)
         {
-            _productsList = container.ProductsList;
+            _productsList = container.FindExpiredElements();
 
-            if (container.CheckExpiredItems() > 0)
+            if (_productsList.Count > 0 && !_isDeleted)
             {
                 del.Visible = true;
-                checkText.Text = "Product is expired. Require to delete.";
+                checkText.Visible = true;
             }
         }
 
@@ -86,42 +83,28 @@ namespace WinFormsApp1
         {
             string value = "";
 
-            _productsList = container.ProductsList;
-
-            
-
             for (int i = 0; i < products.Items.Count; i++)
             {
                 value = products.Items[i].ToString();
-
+                
                 foreach (var item in _productsList)
                 {
                     if (value.Contains(item))
-                        _numbers.Add(i);
+                        products.Items.Remove(value);
                 }
             }
 
-            
+            container.PopBad();
+            container.PopFresh();
 
-            try
-            {
-                for (int i = 0; i < _numbers.Count; i++)
-                {
-                    container.PopBad();
-                    products.Items.RemoveAt(_numbers[i]);
+            MessageBox.Show("Expired elements deleted", "Success", MessageBoxButtons.OK);
 
-                    MessageBox.Show("Success", "Success", MessageBoxButtons.OK);
+            _count = 1;
 
-                    _count = 1;
+            _isDeleted = true;
 
-                    checkText.Visible = false;
-                    del.Visible = false;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            checkText.Visible = false;
+            del.Visible = false;
         }
     }
 }
