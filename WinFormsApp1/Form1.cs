@@ -8,7 +8,7 @@ namespace WinFormsApp1
         private int _count = 1;
         private bool _isDeleted = false;
 
-        private List<string> _productsList;
+        private List<string>? _productsList;
 
         ProductsContainer<string> container;
 
@@ -17,6 +17,8 @@ namespace WinFormsApp1
             InitializeComponent();
 
             container = new ProductsContainer<string>();
+
+            check.Enabled = false;
         }
 
         private void add_Click(object sender, EventArgs e)
@@ -66,6 +68,8 @@ namespace WinFormsApp1
 
             products.Items.Add(_product);
 
+            if (!check.Enabled)
+                check.Enabled = true;
         }
 
         private void check_Click(object sender, EventArgs e)
@@ -102,6 +106,8 @@ namespace WinFormsApp1
             _count = 1;
 
             _isDeleted = true;
+
+            check.Enabled = false;
 
             checkText.Visible = false;
             del.Visible = false;
